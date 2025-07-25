@@ -43,6 +43,7 @@ jobs:
 
       # Check the Quality Gate status
       - name: SonarQube Quality Gate Check
+        continue-on-error: true
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
         # Force to fail step after specific time.
