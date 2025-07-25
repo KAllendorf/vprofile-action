@@ -5,7 +5,7 @@ metadata:
   labels:
     app: vprodb
 spec:
-  storageClassName: default
+  storageClassName: ebs-sc
   accessModes:
     - ReadWriteOnce
   resources:
