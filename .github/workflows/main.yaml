@@ -74,7 +74,6 @@ jobs:
   DEPLOY_TO_EKS:
     needs: BUILD_AND_PUBLISH
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Code checkout
         uses: actions/checkout@v4
@@ -90,13 +89,10 @@ jobs:
         id: getkubeconfig
         run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
 
-      - name: End workflow if getkubeconfig fails
-        if: ${{ steps.getkubeconfig.outcome == 'failure' }}
-        run: exit 1
-
       - name: Delete regcred
         id: delregcred
-        run: kubectl delete secret docker-registry regcred
+        continue-on-error: true
+        run: kubectl delete secret regcred
 
       - name: Login to ECR
         run: kubectl create secret docker-registry regcred --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS --docker-password=$(aws ecr get-login-password)
